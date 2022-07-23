@@ -1,4 +1,6 @@
-const selectionOptions = ['rock','paper','scissors']
+const selectionOptions = ['rock', 'paper', 'scissors']
+let playerScore = 0;
+let computerScore = 0;
 
 
 
@@ -16,40 +18,57 @@ let getPlayerSelection = () => {
     return playerSelection
 }
 
-let singleRound = () => {
+let singleRound = (e) => {
+
     let computerSelection = getComputerChoice()
-    let formattedPlayerSelection = getPlayerSelection().toLowerCase();
+    // let formattedPlayerSelection = getPlayerSelection().toLowerCase();
+    let formattedPlayerSelection = e.target.id
 
     if (formattedPlayerSelection != 'rock' && formattedPlayerSelection != 'paper' && formattedPlayerSelection != 'scissors') {
         console.log(`Please only select 'rock', 'paper', or 'scissors'.`)
         return false
     }
 
-    
+
     if (computerSelection == 'rock') {
         if (formattedPlayerSelection == 'rock') {
-            return `You both selected rock.  It is a tie`
+            displayRoundWinner.textContent = `You both selected rock.  It is a tie`
+            updateScore()
         } else if (formattedPlayerSelection == 'paper') {
-            return `You selected Paper and the computer selected rock.  Paper covers rock.  You win`
+            displayRoundWinner.textContent =  `You selected Paper and the computer selected rock.  Paper covers rock.  You win`
+            playerScore++
+            updateScore()
         } else {
-            return `You selected scissors and the computer selected rock.  Rock smashes scissors.  Computer wins`
-        } 
+            displayRoundWinner.textContent = `You selected scissors and the computer selected rock.  Rock smashes scissors.  Computer wins`
+            computerScore++
+            updateScore()
+        }
     } else if (computerSelection == 'scissors') {
         if (formattedPlayerSelection == 'scissors') {
-            return `You both selected scissors.  It is a tie`
+            displayRoundWinner.textContent = `You both selected scissors.  It is a tie`
+            updateScore()
         } else if (formattedPlayerSelection == 'paper') {
-            return `You selected Paper and the computer selected scissors.  Scissors cuts paper.  Computer wins`
+            displayRoundWinner.textContent = `You selected Paper and the computer selected scissors.  Scissors cuts paper.  Computer wins`
+            computerScore++
+            updateScore()
         } else {
-            return `You selected rock and the computer selected scissors.  Rock smashes scissors.  You win`
+            displayRoundWinner.textContent = `You selected rock and the computer selected scissors.  Rock smashes scissors.  You win`
+            playerScore++
         }
     } else {
         if (formattedPlayerSelection == 'paper') {
-            return `You both selected paper.  It is a tie`
+            displayRoundWinner.textContent = `You both selected paper.  It is a tie`
+            updateScore()
         } else if (formattedPlayerSelection == 'scissors') {
-            return `You selected Scissors and the computer selected paper.  Scissors cuts paper.  You win`
+            displayRoundWinner.textContent = `You selected Scissors and the computer selected paper.  Scissors cuts paper.  You win`
+            playerScore++
+            updateScore()
         } else {
-            return `You selected rock and the computer selected paper.  Paper covers rock.  Computer wins`
-    }
+            displayRoundWinner.textContent = `You selected rock and the computer selected paper.  Paper covers rock.  Computer wins`
+            computerScore++
+            updateScore()
+            
+        }
     }
 }
 
@@ -58,23 +77,36 @@ let game = () => {
     let roundNumber = 0;
     let playerScore = 0;
     let computerScore = 0;
-    while (roundNumber < 5) {
-        let gameRound = singleRound()
-        if (gameRound == false) {
-            continue
-        }
-        console.log(gameRound)
-
-        if (gameRound.slice(gameRound.length-4) == ' win') {
-            playerScore++
-        } else if (gameRound.slice(gameRound.length-4) == 'wins' ) {
-            computerScore++
-        }
-        roundNumber++
 
 
+    console.log(gameRound)
 
+    if (gameRound.slice(gameRound.length - 4) == ' win') {
+        playerScore++
+    } else if (gameRound.slice(gameRound.length - 4) == 'wins') {
+        computerScore++
     }
-    console.log(`Player: ${playerScore}, Computer: ${computerScore}`)
 
+    console.log(`Player: ${playerScore}, Computer: ${computerScore}`)
 }
+
+
+let scissorsBtn = document.querySelector('.scissors-btn')
+let rockBtn = document.querySelector('.rock-btn')
+let paperBtn = document.querySelector('.paper-btn')
+let humanScoreDisplay = document.querySelector('.human-score')
+let computerScoreDisplay = document.querySelector('.computer-score')
+let displayRoundWinner = document.querySelector('.display-round-winner')
+
+
+let updateScore = () => {
+    humanScoreDisplay.textContent = `Human Score: ${playerScore}`
+    computerScoreDisplay.textContent= `Computer Score: ${computerScore}`
+}
+
+
+scissorsBtn.addEventListener('click', singleRound)
+rockBtn.addEventListener('click',singleRound)
+paperBtn.addEventListener('click',singleRound)
+
+
